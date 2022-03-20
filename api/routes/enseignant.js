@@ -20,7 +20,7 @@ router.delete(
   EnseignantController.deleteEnseignant
 );
 router.get("/", checkAuths.userAuth, EnseignantController.getAllEnseignant);
-router.get("/:enseignantId", EnseignantController.getOneEnseignant);
+router.get("/ens/:enseignantId", EnseignantController.getOneEnseignant);
 router.post("/login", EnseignantController.logIn);
 router.get(
   "/teacherCount",

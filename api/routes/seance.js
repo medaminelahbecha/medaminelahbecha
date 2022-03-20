@@ -3,6 +3,7 @@ const router = express.Router();
 const checkAuths = require("../middleware/check-auth");
 const userC = require("../middleware/userConnecte");
 const SeanceController = require("../controllers/seance");
+const EnseignantController = require("../controllers/enseignant");
 
 router.post("/", checkAuths.userAuth, SeanceController.createOneSeance);
 router.get("/userConnecte", checkAuths.userAuth, userC.getUserConnecte);

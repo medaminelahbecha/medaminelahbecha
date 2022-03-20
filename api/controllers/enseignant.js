@@ -13,7 +13,7 @@ exports.getAllEnseignant = (req, res, next) => {
       return res.json({ enseignants });
     })
     .catch((error) => {
-      next(error);  
+      next(error);
     });
 };
 
@@ -116,17 +116,14 @@ function createEnseignant(name, phone, email, url, langue, cours, hash) {
   });
 }
 exports.getTotalTeacherCount = (req, res, next) => {
-  Enseignant.find()
+  return Enseignant.find()
     .exec()
     .then((enseignants) => {
+      console.log("aaaa", enseignants);
       const response = {
         count: enseignants.length,
       };
-      return res.status(200).json(response);
-    })
-    .catch((error) => {
-      console.log(error);
-      next(error);
+      res.status(200).json(response);
     });
 };
 exports.getProfile = (req, res, next) => {
