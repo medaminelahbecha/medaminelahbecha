@@ -7,9 +7,9 @@ const UserController = require("../controllers/user");
 router.post("/signup", UserController.signUp);
 
 router.post("/login", UserController.logIn);
-router.get("/is-admin", UserController.isAdmin);
-router.get("/is-student", UserController.isStudent);
-router.get("/is-teacher", UserController.isTeacher);
+router.get("/is-admin", checkAuths.userAuth, UserController.isAdmin);
+router.get("/is-student", checkAuths.userAuth, UserController.isStudent);
+router.get("/is-teacher", checkAuths.userAuth, UserController.isTeacher);
 
 router.get("", UserController.getAll);
 router.get("/me", checkAuths.userAuth, UserController.getProfile);
