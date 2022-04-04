@@ -11,10 +11,10 @@ const enseignantSchema = mongoose.Schema({
 
   password: { type: String, required: true },
   phone: { type: String, required: true },
-  url: { type: String },
+  url: { type: String,required: true },
   heureDebut: { type: String },
   heureFin: { type: String },
-  langue: { type: Array },
+  langue: { type: Array ,required: true},
   seances: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Seance",

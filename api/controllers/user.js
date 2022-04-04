@@ -175,7 +175,7 @@ function createUser(name, phone, email, country, gender, hash) {
 }
 
 //
-exports.getLast30DaysRegisteredUser = async function () {
+exports.getLast30DaysRegisteredUser = async function (req, res, next) {
   let date = new Date();
   date.setMonth(date.getMonth() - 1);
   console.log(date.toDateString());
@@ -191,7 +191,8 @@ exports.getLast30DaysRegisteredUser = async function () {
       $count: "userCount",
     },
   ]).then((r) => {
-    return r[0].userCount;
+    console.log(r);
+    return res.status(200).json(r[0].userCount);
   });
 };
 
