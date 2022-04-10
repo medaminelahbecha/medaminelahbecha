@@ -7,6 +7,7 @@ const UserController = require("../controllers/user");
 router.post("/signup", UserController.signUp);
 
 router.post("/login", UserController.logIn);
+router.post("/refreshtoken", UserController.refreshToken);
 router.get("/is-admin", checkAuths.userAuth, UserController.isAdmin);
 router.get("/is-student", checkAuths.userAuth, UserController.isStudent);
 router.get("/is-teacher", checkAuths.userAuth, UserController.isTeacher);

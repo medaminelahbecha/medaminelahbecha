@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 var passwordHash = require("password-hash");
 const jwt = require("jsonwebtoken");
-
+const { v4: uuidv4 } = require("uuid");
 const User = require("../models/user");
+const RefreshToken = require("../models/refreshToken");
 
 exports.isAdmin = (req, res, next) => {
   console.log(req.userData.userType);
@@ -131,9 +132,11 @@ exports.logIn = (req, res, next) => {
             expiresIn: "1h",
           }
         );
+        let _token = uuidv4();
         return res.status(200).json({
           message: "Auth Successful!",
           token: token,
+          refreshToken: _token,
           userId: userId,
           userName: userName,
         });
@@ -145,6 +148,44 @@ exports.logIn = (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+};
+
+//refresh token
+exports.refreshToken = async (req, res) => {
+  const { refreshToken: requestToken } = req.body;
+  if (requestToken == null) {
+    return res.status(403).json({ message: "Refresh Token is required!" });
+  }
+  try {
+    let refreshToken = await RefreshToken.findOne({ token: requestToken });
+    if (!refreshToken) {
+      res.status(403).json({ message: "Refresh token is not in database!" });
+      return;
+    }
+    if (RefreshToken.verifyExpiration(refreshToken)) {
+      RefreshToken.findByIdAndRemove(refreshToken._id, {
+        useFindAndModify: false,
+      }).exec();
+
+      res.status(403).json({
+        message: "Refresh token was expired. Please make a new signin request",
+      });
+      return;
+    }
+    let newAccessToken = jwt.sign(
+      { id: refreshToken.user._id },
+      process.env.JWT_KEY,
+      {
+        expiresIn: 86400,
+      }
+    );
+    return res.status(200).json({
+      accessToken: newAccessToken,
+      refreshToken: refreshToken.token,
+    });
+  } catch (err) {
+    return res.status(500).send({ message: err });
+  }
 };
 
 exports.deleteUser = (req, res, next) => {
