@@ -16,6 +16,8 @@ exports.getAllLessons = (req, res, next) => {
           return {
             _id: le._id,
             name: le.name,
+            lessonImage: le.lessonImage,
+            description: le.description,
             cours: le.cours,
           };
         }),
@@ -29,16 +31,18 @@ exports.getAllLessons = (req, res, next) => {
     });
 };
 exports.createOneLesson = (req, res, next) => {
-  const ens = createLesson(req.body.name, req.body.cours);
-  return ens
+  const ens = createLesson(req);
+  console.log(req);
+  ens
     .save()
-
     .then((lesson) => {
       return res.status(201).json({
         message: "lesson created successfully!",
         lesson: {
           _id: lesson._id,
           name: lesson.name,
+          lessonImage: lesson.lessonImage,
+          description: lesson.description,
           cours: lesson.cours,
         },
       });
@@ -64,10 +68,13 @@ exports.deleteLesson = (req, res, next) => {
     });
 };
 
-function createLesson(name, cours) {
+function createLesson(req) {
+  console.log("aaaaaaa", req.file);
   return new lesson({
     _id: new mongoose.Types.ObjectId(),
-    name: name,
-    cours: cours,
+    name: req.body.name,
+    cours: req.body.cours,
+    description: req.body.description,
+    lessonImage: req.file.path,
   });
 }
