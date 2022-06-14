@@ -142,7 +142,6 @@ exports.getAllSeancesCalendar = (req, res, next) => {
           let title = seance.lesson;
           return {
             title: title.name,
-
             start: seance.dateDebut,
             end: seance.dateFin,
           };

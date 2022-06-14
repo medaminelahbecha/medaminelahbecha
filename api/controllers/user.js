@@ -232,8 +232,8 @@ exports.getLast30DaysRegisteredUser = async function (req, res, next) {
       $count: "userCount",
     },
   ]).then((r) => {
-    console.log(r);
-    return res.status(200).json(r[0].userCount);
+    console.log("aaaaaaaaaaaaaaaaaa", r);
+    return res.status(200).json(r.length);
   });
 };
 
